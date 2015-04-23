@@ -9,6 +9,34 @@ class RubyEscPos
     text nil, lines
   end
 
+  def style(style, align)
+    if style == :header
+      style = STYLE_HEADER
+    elsif style == :subheader
+      style = STYLE_SUBHEADER
+    elsif style == :normal
+      style = STYLE_NORMAL
+    elsif style == :footer
+      style = STYLE_FOOTER
+    end
+
+    if align == :left
+      align = TXT_ALIGN_LT
+    elsif align == :center
+      align = TXT_ALIGN_CT
+    elsif align == :right
+      align = TXT_ALIGN_RT
+    end
+
+    set(
+      align,
+      style[:font],
+      style[:font_type],
+      style[:width],
+      style[:height]
+    )
+  end
+
   def set(align = TXT_ALIGN_LT, font = TXT_FONT_A, font_type = FONT_TYPE_NORMAL, width = 1, height = 1, density = nil)
     write align
 
@@ -49,7 +77,7 @@ class RubyEscPos
     write density if density
   end
 
-  def barcode(code, bc = BARCODE_UPC_A, pos = BARCODE_TXT_BLW, font = BARCODE_FONT_A, width, height)
+  def barcode(code, width = 64, height = 64, bc = BARCODE_UPC_A, pos = BARCODE_TXT_OFF, font = nil)
     write TXT_ALIGN_CT
     write pos
     write font
@@ -143,4 +171,33 @@ class RubyEscPos
   FONT_TYPE_BOLD_UNDERLINE   = "BU"
   FONT_TYPE_BOLD_UNDERLINE_2 = "BU2"
   FONT_TYPE_NORMAL           = "N"
+
+  # Styles
+  STYLE_HEADER = {
+    :font      => RubyEscPos::TXT_FONT_A,
+    :font_type => RubyEscPos::FONT_TYPE_BOLD,
+    :width     => 2,
+    :height    => 2
+  }
+
+  STYLE_SUBHEADER = {
+    :font      => RubyEscPos::TXT_FONT_A,
+    :font_type => RubyEscPos::FONT_TYPE_BOLD,
+    :width     => 1,
+    :height    => 1
+  }
+
+  STYLE_NORMAL = {
+    :font      => RubyEscPos::TXT_FONT_A,
+    :font_type => RubyEscPos::FONT_TYPE_NORMAL,
+    :width     => 1,
+    :height    => 1
+  }
+
+  STYLE_FOOTER = {
+    :font      => RubyEscPos::TXT_FONT_B,
+    :font_type => RubyEscPos::FONT_TYPE_NORMAL,
+    :width     => 1,
+    :height    => 1
+  }
 end

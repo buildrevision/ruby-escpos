@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'ruby-escpos'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2015-04-23'
   s.summary     = "Ruby ESC/POS"
   s.description = "Ruby library to manipulate ESC/POS Printers"
