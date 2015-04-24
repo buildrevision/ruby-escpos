@@ -83,6 +83,7 @@ class RubyEscPos
     write font
     write bc
     write code
+    new_line
   end
 
   def text(txt, new_lines = 1)
@@ -98,15 +99,56 @@ class RubyEscPos
     write cut_type
   end
 
+  def table(rows, new_lines = 1, main_column_index = 1, max_width = 42)
+    max_widths = Array.new(rows[0].count) { |i| 0 }
+
+    rows.each_with_index do |row, i|
+      row.each_with_index do |cell, y|
+        if y < row.length - 1
+          rows[i][y][:text] += ' '
+        end
+
+        if max_widths[y] < cell[:text].length
+          max_widths[y] = cell[:text].length
+        end
+
+        if max_widths[y] < cell[:width].to_i
+          max_widths[y] = cell[:width]
+        end
+
+        if cell[:text].length < cell[:width].to_i
+          cell[:text] = (' ' * (cell[:width] - cell[:text].length)) + cell[:text]
+        end
+      end
+    end
+
+    rows.each_with_index do |row, i|
+      row.each_with_index do |cell, y|
+        padding = ''
+        if y == main_column_index
+          padding = (' ' * (max_width - row.map { |x| x[:text].length }.inject(0, :+)))
+        elsif y < row.length - 1
+          padding = (' ' * (max_widths[y] - cell[:text].length))
+        end
+
+        if cell[:align]
+          write(cell[:text] = padding + cell[:text])
+        else
+          write(cell[:text] = cell[:text] + padding)
+        end
+      end
+      new_line
+    end
+
+    new_line new_lines - 1
+  end
+
   private
 
   def write(data)
     if data.is_a? String
       @buffer += data
     elsif data.is_a? Array
-      #@buffer += data.join
-      #@buffer += data.map { |b| sprintf(", 0x%02X", b) }.join
-      #@buffer += data.map { |x| x.hex }.pack('c*')
       @buffer += data.pack('U*')
     end
   end
