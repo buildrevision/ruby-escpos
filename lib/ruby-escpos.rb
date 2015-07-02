@@ -79,8 +79,18 @@ class RubyEscPos
 
   def barcode(code, width = 64, height = 64, bc = BARCODE_UPC_A, pos = BARCODE_TXT_OFF, font = nil)
     write TXT_ALIGN_CT
-    write pos
+
+    if height >= 2 && height <= 6
+      write BARCODE_HEIGHT
+    end
+
+    if width >= 1 && width <=255
+      write BARCODE_WIDTH
+    end
+
     write font
+    write pos
+
     write bc
     write code
     new_line
