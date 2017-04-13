@@ -77,15 +77,19 @@ class RubyEscPos
     write density if density
   end
 
-  def barcode(code, width = 64, height = 64, bc = BARCODE_UPC_A, pos = BARCODE_TXT_OFF, font = nil)
+  def barcode(code, width = 3, height = 100, bc = BARCODE_UPC_A, pos = BARCODE_TXT_OFF, font = nil)
     write TXT_ALIGN_CT
 
-    if height >= 2 && height <= 6
-      write BARCODE_HEIGHT
+    if width >= 2 && width <= 6
+			bc_width = BARCODE_WIDTH.dup
+			bc_width[2] = width
+      write bc_width
     end
 
-    if width >= 1 && width <=255
-      write BARCODE_WIDTH
+    if height >= 1 && height <= 255
+			bc_height = BARCODE_HEIGHT.dup
+			bc_height[2] = height
+      write bc_height
     end
 
     write font
